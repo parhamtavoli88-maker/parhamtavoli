@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects - parhamtavoli.ir</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      background: linear-gradient(135deg, #e3d7c9 0%, #f5f0e8 50%, #e8e0d5 100%);
+      min-height: 100vh;
+    }
+
+    /* Animated Background */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    .animated-bg::before,
+    .animated-bg::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 85, 255, 0.1) 0%, transparent 70%);
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .animated-bg::before {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .animated-bg::after {
+      bottom: 10%;
+      right: 10%;
+      animation-delay: 10s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0) scale(1);
+      }
+      50% {
+        transform: translate(50px, -50px) scale(1.2);
+      }
+    }
+
+    /* Navigation */
+    .nav-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: rgb(0, 85, 255);
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      background-color: rgba(255, 255, 255, 0.9);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links a:hover {
+      background-color: rgb(0, 85, 255);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 85, 255, 0.3);
+    }
+
+    .nav-links a.active {
+      background-color: rgb(0, 85, 255);
+      color: white;
+    }
+
+    /* Main Container */
+    .main-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 100px 20px 50px;
+    }
+
+    /* Header */
+    .page-header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-title {
+      font-size: 60px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, rgb(0, 85, 255) 0%, #333 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-title {
+      font-size: 32px;
+      color: rgb(0, 85, 255);
+      font-weight: bold;
+    }
+
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Experience Cards */
+    .experience-card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.8s ease-out both;
+    }
+
+    .experience-card:nth-child(1) { animation-delay: 0.1s; }
+    .experience-card:nth-child(2) { animation-delay: 0.2s; }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .experience-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .card-date {
+      color: rgb(0, 85, 255);
+      font-size: 20px;
+      font-weight: bold;
+      min-width: 150px;
+    }
+
+    .card-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    .card-info h3 {
+      color: #333;
+      font-size: 22px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .card-info p {
+      color: #666;
+      line-height: 1.6;
+      margin: 5px 0;
+    }
+
+    .card-description {
+      color: #555;
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 40px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .card-content {
+        grid-template-columns: 1fr;
+      }
+
+      .header-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .experience-card {
+        padding: 25px;
+      }
+
+      .nav-container {
+        top: 10px;
+        right: 10px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+
+      .main-container {
+        padding: 80px 15px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="animated-bg"></div>
+  
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [isVisible, setIsVisible] = useState(false);
+
+      useEffect(() => {
+        setIsVisible(true);
+      }, []);
+
+      const experiences = [
+        {
+          date: '2025 - Present',
+          position: 'Site desigenr',
+          company: 'parisan beauty salon',
+          location: 'Iran-Tehran',
+          description: <p>
+            I wrote a site for a beauty salon using html-css-react languages, where the beauty salon's portfolio and services can be viewed.
+            <a href="http://parisan-beauty.ir/#home">Click to view the site.</a>
+            </p>
+        },
+        {
+          date: '2025 - Present',
+          position: 'Site designer',
+          company: 'Farhikhte highschool',
+          location: 'Iran-Tehran',
+          description: <p>
+            I wrote a site for a one of the best highschool in tehran using html-css-reac-javascript and.... languages, where the highschool's portfolio and services can be viewed - gallery - activities - and more.
+            <a href="https://farhikhteh-school.com/">Click to view the site.</a>
+            </p>
+        },
+        
+      ];
+
+      return (
+        <div className="main-container">
+          {/* Navigation */}
+          <div className="nav-container">
+            <div className="nav-links">
+              <a href="index.html">HOME</a>
+              <a href="resume.html">RESUME</a>
+              <a href="project.html" className="active">PROJECTS</a>
+            </div>
+          </div>
+
+          {/* Header */}
+          <div className="page-header">
+            <h1 className="page-title">Projects</h1>
+            <div className="header-actions">
+              <h2 className="section-title"></h2>
+            </div>
+          </div>
+
+          {/* Experience Section */}
+          <div>
+            {experiences.map((exp, index) => (
+              <div key={index} className="experience-card">
+                <div className="card-header">
+                  <div className="card-date">{exp.date}</div>
+                </div>
+                <div className="card-content">
+                  <div className="card-info">
+                    <h3>{exp.position}</h3>
+                    <p>{exp.company}</p>
+                    <p>{exp.location}</p>
+                  </div>
+                  <div className="card-description">
+                    {exp.description}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

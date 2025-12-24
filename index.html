@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>parhamtavoli.info</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background: linear-gradient(135deg, #e3d7c9 0%, #f5f0e8 50%, #e8e0d5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .animated-bg::before,
+        .animated-bg::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 85, 255, 0.1) 0%, transparent 70%);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .animated-bg::before {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .animated-bg::after {
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(50px, -50px) scale(1.2);
+            }
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: rgb(0, 85, 255);
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-size: 18px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links a:hover {
+            background-color: rgb(0, 85, 255);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 85, 255, 0.3);
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 100px 20px 50px;
+            gap: 60px;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background: linear-gradient(145deg, #fff3e6 0%, #ffe8d6 100%);
+            border-radius: 30px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            animation: fadeInUp 1s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: block;
+            object-fit: cover;
+            border: 5px solid rgba(0, 85, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(0, 85, 255, 0.3);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(0, 85, 255, 0.5);
+            }
+        }
+
+        .profile-name {
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+
+        .profile-title {
+            text-align: center;
+            font-size: 24px;
+            color: rgb(0, 85, 255);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(0, 85, 255, 0.1);
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .social-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: rgb(0, 85, 255);
+            transition: fill 0.3s ease;
+        }
+
+        .social-icon:hover svg {
+            fill: rgb(0, 70, 220);
+        }
+
+        /* Content Section */
+        .content-section {
+            text-align: center;
+            max-width: 800px;
+            animation: fadeIn 1.2s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .greeting {
+            font-size: 80px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            background: linear-gradient(135deg, rgb(0, 85, 255) 0%, #333 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .description {
+            font-size: 22px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 40px;
+            animation: slideInRight 1s ease-out 0.5s both;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .skill-tag {
+            background: rgba(0, 85, 255, 0.1);
+            color: rgb(0, 85, 255);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid rgba(0, 85, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .skill-tag:nth-child(1) { animation-delay: 0.1s; }
+        .skill-tag:nth-child(2) { animation-delay: 0.2s; }
+        .skill-tag:nth-child(3) { animation-delay: 0.3s; }
+        .skill-tag:nth-child(4) { animation-delay: 0.4s; }
+        .skill-tag:nth-child(5) { animation-delay: 0.5s; }
+
+        .skill-tag:hover {
+            background: rgb(0, 85, 255);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 85, 255, 0.3);
+        }
+
+        /* Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: rgb(0, 85, 255);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: rgb(0, 70, 220);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 85, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: rgb(0, 85, 255);
+            border: 2px solid rgb(0, 85, 255);
+        }
+
+        .btn-secondary:hover {
+            background: rgb(0, 85, 255);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 85, 255, 0.4);
+        }
+
+        /* Achievement Section */
+        .achievement-section {
+            background: rgba(255, 255, 255, 0.7);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1s ease-out 1s both;
+        }
+
+        .achievement-title {
+            font-size: 24px;
+            color: rgb(0, 85, 255);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .achievement-text {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer-text {
+            text-align: center;
+            margin-top: 60px;
+            color: #999;
+            font-size: 16px;
+            animation: fadeIn 1s ease-out 1.2s both;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .greeting {
+                font-size: 50px;
+            }
+
+            .description {
+                font-size: 18px;
+            }
+
+            .profile-card {
+                padding: 30px 20px;
+            }
+
+            .profile-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .nav-container {
+                top: 10px;
+                right: 10px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .nav-links a {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            .main-container {
+                padding: 80px 15px 30px;
+                gap: 40px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [isVisible, setIsVisible] = useState(false);
+
+            useEffect(() => {
+                setIsVisible(true);
+            }, []);
+
+            const skills = ['HTML', 'CSS', 'JavaScript', 'Python', 'Arduino'];
+
+            return (
+                <div className={`main-container ${isVisible ? 'loading' : ''}`}>
+                    {/* Navigation */}
+                    <div className="nav-container">
+                        <div className="nav-links">
+                            <a href="index.html">HOME</a>
+                            <a href="resume.html">RESUME</a>
+                            <a href="project.html">PROJECTS</a>
+                        </div>
+                    </div>
+
+                    {/* Profile Card */}
+                    <div className="profile-card">
+                        <img 
+                            src="aks.jpg" 
+                            alt="Parham Tavoli" 
+                            className="profile-image"
+                        />
+                        <h1 className="profile-name">Parham Tavoli</h1>
+                        <p className="profile-title">Programmer</p>
+                        
+                        <div className="social-icons">
+                            <a 
+                                href="https://www.instagram.com/parham_tavoli/?hl=en" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                aria-label="Instagram Profile"
+                                className="social-icon"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </a>
+                            <a 
+                                href="https://t.me/Parham_TOV" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                aria-label="Telegram Profile"
+                                className="social-icon"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="content-section">
+                        <h1 className="greeting">Hello!</h1>
+                        
+                        <p className="description">
+                            I am a passionate programmer with expertise in various programming languages and technologies.
+                            I love creating innovative solutions and bringing ideas to life through code.
+                        </p>
+
+                        <div className="skills-list">
+                            {skills.map((skill, index) => (
+                                <span key={index} className="skill-tag">{skill}</span>
+                            ))}
+                        </div>
+
+                        <div className="achievement-section">
+                            <h3 className="achievement-title">🏆 Competition Achievement</h3>
+                            <p className="achievement-text">
+                                I have achieved various positions in the fields of robotics and Python programming 
+                                in the 2025 Iran Fira Cup competitions, showcasing my skills and dedication to excellence.
+                            </p>
+                        </div>
+
+                        <div className="action-buttons">
+                            <a href="resume.html" className="btn btn-primary">VIEW RESUME</a>
+                            <a href="project.html" className="btn btn-secondary">MY PROJECTS</a>
+                        </div>
+                    </div>
+
+                    <div className="footer-text">
+                        <p>Parham Tavoli/ Programmer</p>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
